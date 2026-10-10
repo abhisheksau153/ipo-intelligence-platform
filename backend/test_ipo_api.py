@@ -40,7 +40,21 @@
 # print(ipos)
 
 from backend.ingestion.ipo_ingestion import ingest_current_ipos
+from backend.clients.nse_client import fetch_current_ipos
+from backend.repositories.ipo_repository import save_ipos
+
+raw_ipo = fetch_current_ipos()
+print("NSE client output : ", raw_ipo)
 
 ipos = ingest_current_ipos()
+print("Ingested IPOs : ", ipos)
 
-print(ipos)
+save_ipos(ipos)
+print("IPOs saved to the database successfully")
+
+
+# from backend.database import get_database_connection
+
+# conn = get_database_connection()
+# print(conn)
+# conn.close()

@@ -14,6 +14,9 @@ def fetch_current_ipos():
             headers=headers,
             timeout=10
         )
+        print("NSE client response status code : ", response.status_code)
+        print("Content-Type of the response : ", response.headers.get("Content-Type"))
+        print("Reponse preview : ", response.text[:500])  # Print the first 500 characters of the response text
         response.raise_for_status()  # Raise an exception for HTTP errors
     
     except requests.exceptions.RequestException as error:
