@@ -39,19 +39,26 @@
 
 # print(ipos)
 
-from backend.ingestion.ipo_ingestion import ingest_current_ipos
-from backend.clients.nse_client import fetch_current_ipos
+# 
+
+from datetime import date
 from backend.repositories.ipo_repository import save_ipos
 
-raw_ipo = fetch_current_ipos()
-print("NSE client output : ", raw_ipo)
+test_ipos = [
+    {
+        "companyName": "TEST IPO - DELETE LATER",
+        "symbol": "TESTIPO",
+        "series": "EQ",
+        "issueStartDate": date(2026, 10, 5),
+        "issueEndDate": date(2026, 10, 10),
+        "issueSize": 100000,
+        "issuePrice": "Rs.100-110",
+        "status": "TEST"
+    }
+]
 
-ipos = ingest_current_ipos()
-print("Ingested IPOs : ", ipos)
-
-save_ipos(ipos)
-print("IPOs saved to the database successfully")
-
+save_ipos(test_ipos)
+print("Test record submitted to PostgreSQL")
 
 # from backend.database import get_database_connection
 
