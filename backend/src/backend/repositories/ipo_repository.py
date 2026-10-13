@@ -1,20 +1,20 @@
 from backend.database import get_database_connection
-
+from psycopg.rows import dict_row
 
 
 def fetch_all_ipos():
-    ipos = [
-                { 
-            "id": 1,
-            "ipo_name": "tata ipo",
-            "minimum_investment" : 10000,
-            "minimum_shares_size" : 100,
-            "issue_size" : 1000000, 
-            "opening_date" : "2026-10-06",
-            "closing_date" : "2026-10-10",
-         },
-    ]
-    return ipos
+    "Fetching all IPOs from the database"
+    connection  = get_database_connection()
+    try:
+        with connection.cursor(row_factory=dict_row) as cursor:
+            cursor.execute("SELECT * FROM ipos")
+            ipos = cursor.fetchall()
+            return ipos
+    except Exception:
+        connection.rollback()
+        raise
+    finally:
+        connection.close()
 
 def save_ipos(ipos):
     # Placeholder for saving IPOs to the database

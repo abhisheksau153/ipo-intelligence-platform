@@ -44,24 +44,32 @@
 from datetime import date
 from backend.repositories.ipo_repository import save_ipos
 
-test_ipos = [
-    {
-        "companyName": "TEST IPO - DELETE LATER",
-        "symbol": "TESTIPO",
-        "series": "EQ",
-        "issueStartDate": date(2026, 10, 5),
-        "issueEndDate": date(2026, 10, 10),
-        "issueSize": 100000,
-        "issuePrice": "Rs.100-110",
-        "status": "TEST"
-    }
-]
+# test_ipos = [
+#     {
+#         "companyName": "TEST IPO - DELETE LATER",
+#         "symbol": "TESTIPO",
+#         "series": "EQ",
+#         "issueStartDate": date(2026, 10, 5),
+#         "issueEndDate": date(2026, 10, 10),
+#         "issueSize": 100000,
+#         "issuePrice": "Rs.100-110",
+#         "status": "TEST"
+#     }
+# ]
 
-save_ipos(test_ipos)
-print("Test record submitted to PostgreSQL")
+# save_ipos(test_ipos)
+# print("Test record submitted to PostgreSQL")
 
 # from backend.database import get_database_connection
 
 # conn = get_database_connection()
 # print(conn)
 # conn.close()
+
+
+from backend.repositories.ipo_repository import fetch_all_ipos
+
+ipos = fetch_all_ipos()
+
+print("Number of IPO records:", len(ipos))
+print("IPO records:", ipos)
