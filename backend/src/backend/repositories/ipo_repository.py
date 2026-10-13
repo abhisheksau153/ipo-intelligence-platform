@@ -17,6 +17,8 @@ def fetch_all_ipos():
         connection.close()
 
 def save_ipos(ipos):
+    if not ipos:
+        return  # No IPOs to save
     # Placeholder for saving IPOs to the database
     # Implement the logic to save IPOs to the database here
     data_insert = """
@@ -32,7 +34,17 @@ def save_ipos(ipos):
         )
         
     VALUES (
-        %s, %s, %s, %s, %s, %s, %s, %s)"""
+        %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (symbol) DO UPDATE SET
+        company_name = EXCLUDED.company_name,
+        series = EXCLUDED.series,
+        issue_start_date = EXCLUDED.issue_start_date,
+        issue_end_date = EXCLUDED.issue_end_date,
+        issue_size = EXCLUDED.issue_size,
+        issue_price = EXCLUDED.issue_price,
+        source_status = EXCLUDED.source_status,
+        updated_at = CURRENT_TIMESTAMP
+        """
     
     conn = get_database_connection()
     

@@ -4,7 +4,7 @@ import requests
 def fetch_current_ipos():
 
     url = "https://www.nseindia.com/api/ipo-current-issue"
-    
+    # url = "https://www.nseindia.com/json/liveMarket/public-issues-current.json"
     headers = { 
             "User-Agent": "Mozilla/5.0"
             }
@@ -24,6 +24,8 @@ def fetch_current_ipos():
     
     try:
         data = response.json()
+        print("ipo count : ", len(data))
+        print("Symbols : ", [ipo["symbol"] for ipo in data])
     except ValueError as error:
         raise RuntimeError("Failed to parse the IPO data from NSE") from error
     filtered_ipos = []
