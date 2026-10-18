@@ -26,7 +26,41 @@
   color: #6b7280;
 }
 
-/* Main dashboard content */
+/* Main dashboard container */
 .dashboard-content {
   padding-top: 24px;
+}
+
+/* Summary cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 16px;
+}
+
+/* Summary card */
+.summary-card{
+  margin-top: 24px;
+  padding: 24px;
+  background-color: #eff6ff;
+  border: 1px solid #c8f3ff;
+  border-radius: 12px;
+  max-width: 220px;
+
+}
+
+
+/* Card title */
+.summary-card h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #1e3a8a;
+}
+
+/* card value */
+.summary-card p{
+  margin-bottom: 0;
+  font-size: 32px;
+  font-weight: bold;
+  color: #1e3a8a;
 }

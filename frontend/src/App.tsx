@@ -14,6 +14,24 @@ function App() {
         <main className="dashboard-content ">  {/* # represent the page primary content */}
           <h2> IPO Dashboard</h2>             {/* # introduce the dashboard section */}
           <p>Track upcoming, open, and closed IPOs in one place. </p>
+          <div className='summary-cards'>
+            <div className='summary-card'>
+              <h3>Total IPOs</h3>
+              <p>4</p>
+            </div>
+            <div className='summary-card'>
+              <h3>Open IPOs</h3>
+              <p>2</p>
+            </div>
+            <div className='summary-card'>
+              <h3>Upcoming IPOs</h3>
+              <p>3</p>
+            </div>
+            <div className='summary-card'>
+              <h3>Closed IPOs</h3>
+              <p>1</p>
+            </div>
+          </div>
         </main>
       </section>
 
