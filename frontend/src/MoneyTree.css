@@ -1,0 +1,161 @@
+
+.money-tree {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgb(250 204 21 / 20%);
+  border-radius: 20px;
+  background: radial-gradient(
+    ellipse at center,
+    #172554 0%,
+    #0b1120 65%,
+    #050816 100%
+  );
+  box-shadow: 0 0 30px rgb(250 204 21 / 10%);
+}
+
+.money-tree-scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.money-tree-svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Falling coins */
+.tree-coins {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tree-coin {
+  position: absolute;
+  top: var(--coin-top);
+  left: var(--coin-left);
+  width: 13px;
+  height: 13px;
+  margin: -6.5px 0 0 -6.5px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #fff0a0;
+  border-radius: 50%;
+  color: #92400e;
+  background: radial-gradient(
+    circle at 30% 25%,
+    #fff7b8 0%,
+    #facc15 45%,
+    #d97706 80%,
+    #92400e 100%
+  );
+  box-shadow:
+    0 0 5px rgb(250 204 21 / 75%),
+    inset 0 0 2px rgb(255 255 255 / 90%);
+  transform-origin: center;
+  animation: coin-drop var(--coin-duration) ease-in
+    var(--coin-delay) infinite;
+  will-change: top, transform, opacity;
+}
+
+.tree-coin-face {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+/* Pause on the branches, then fall toward the ground. */
+@keyframes coin-drop {
+  0%,
+  30% {
+    top: var(--coin-top);
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) rotateY(0deg);
+  }
+
+  42% {
+    top: calc(var(--coin-top) + 8%);
+    opacity: 1;
+    transform: translate(5px, 0) rotate(45deg) rotateY(90deg);
+  }
+
+  65% {
+    top: 70%;
+    opacity: 1;
+    transform:
+      translate(calc(var(--coin-drift) * 25px), 0)
+      rotate(180deg)
+      rotateY(180deg);
+  }
+
+  85% {
+    top: 88%;
+    opacity: 1;
+    transform:
+      translate(calc(var(--coin-drift) * 45px), 0)
+      rotate(300deg)
+      rotateY(270deg);
+  }
+
+  94%,
+  100% {
+    top: 88%;
+    opacity: 0;
+    transform:
+      translate(calc(var(--coin-drift) * 55px), 0)
+      rotate(360deg)
+      rotateY(360deg);
+  }
+}
+
+/* Ground and collected coins */
+.coin-floor {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 3%;
+  height: 10%;
+  border-bottom: 2px solid rgb(250 204 21 / 25%);
+  background: linear-gradient(
+    to top,
+    rgb(250 204 21 / 7%),
+    transparent
+  );
+  pointer-events: none;
+}
+
+.floor-coin {
+  position: absolute;
+  bottom: 0;
+  width: var(--floor-size);
+  height: calc(var(--floor-size) * 0.48);
+  border: 1px solid #fff0a0;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #fff7b8,
+    #facc15 55%,
+    #b77908
+  );
+  box-shadow: 0 0 4px rgb(250 204 21 / 45%);
+  transform: rotate(var(--floor-rotation));
+}
+
+/* Respect the visitor's motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  .tree-coin {
+    animation: none;
+    opacity: 1;
+  }
+}

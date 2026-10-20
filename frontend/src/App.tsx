@@ -1,6 +1,8 @@
 
 import './App.css'
-
+import CoinAnimation from './CoinAnmattion'
+import MoneyTree from './MoneyTree'
+import GoldCoin from './GoldCoin'
 function App() {
   return (
       <section className='dashboard'>  {/* # creates the main dashboard container */}
@@ -32,6 +34,11 @@ function App() {
               <p>1</p>
             </div>
           </div>
+          <section className='coin-experiment'>
+            <h2>Animation Playground</h2>
+            <p>IPO Money Tree.</p>
+            <MoneyTree />
+          </section>
         </main>
       </section>
 
