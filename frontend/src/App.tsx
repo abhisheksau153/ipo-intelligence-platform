@@ -1,47 +1,77 @@
 
 import './App.css'
-import CoinAnimation from './CoinAnmattion'
 import MoneyTree from './MoneyTree'
-import GoldCoin from './GoldCoin'
+
 function App() {
   return (
-      <section className='dashboard'>  {/* # creates the main dashboard container */}
-        <header className="dashboard-header">  {/*# represents the top area of the application */}
-          <div>                                 {/* # groups related content. */}
-            <h1>IPO Intelligence Platform</h1>  {/* # it is the main page heading */}
-            <p>Your IPO market overview</p>   {/*# Display the supporting text */}
-            </div>
-        </header>
+    <div className="app-shell" id="home">
+      <header className="site-nav">
+        <a className="brand" href="#home" aria-label="IPO Intelligence home">
+          <span className="brand-icon" aria-hidden="true">♧</span>
 
-        <main className="dashboard-content ">  {/* # represent the page primary content */}
-          <h2> IPO Dashboard</h2>             {/* # introduce the dashboard section */}
-          <p>Track upcoming, open, and closed IPOs in one place. </p>
-          <div className='summary-cards'>
-            <div className='summary-card'>
-              <h3>Total IPOs</h3>
-              <p>4</p>
+          <span className="brand-text">
+            <span className="brand-name">IPO Intelligence</span>
+            <span className="brand-tagline">INVEST WITH INSIGHT</span>
+          </span>
+        </a>
+
+        <nav className="nav-links" aria-label="Main navigation">
+          <a className="nav-link active" href="#home">Home</a>
+          <a className="nav-link" href="#ipos">IPOs</a>
+          <a className="nav-link" href="#compare">Compare</a>
+        </nav>
+
+        <a className="nav-cta" href="#ipos">
+          Explore IPOs <span aria-hidden="true">↗</span>
+        </a>
+      </header>
+
+      <main>
+        <section className="hero-section" aria-labelledby="hero-title">
+          <div className="hero-frame">
+            <div className="hero-content">
+              <div className="hero-eyebrow">
+                <span className="status-dot" />
+                SMARTER IPO RESEARCH
+              </div>
+
+              <h1 id="hero-title">
+                IPO Intelligence
+                <span className="title-highlight"> Platform</span>
+              </h1>
+
+              <p className="hero-subtitle">
+                See beyond the listing. Understand the business.
+              </p>
+
+              <p className="hero-description">
+                Discover opportunities, explore company fundamentals,
+                and make more informed investment decisions.
+              </p>
             </div>
-            <div className='summary-card'>
-              <h3>Open IPOs</h3>
-              <p>2</p>
+
+            <div className="hero-tree">
+              <MoneyTree />
             </div>
-            <div className='summary-card'>
-              <h3>Upcoming IPOs</h3>
-              <p>3</p>
-            </div>
-            <div className='summary-card'>
-              <h3>Closed IPOs</h3>
-              <p>1</p>
+
+            <div className="hero-footer">
+              <span className="hero-caption">
+                <span aria-hidden="true">✦</span>
+                Grow your knowledge before you grow your portfolio.
+              </span>
+
+              <a className="hero-link" href="#ipos">
+                Discover opportunities <span aria-hidden="true">↓</span>
+              </a>
             </div>
           </div>
-          <section className='coin-experiment'>
-            <h2>Animation Playground</h2>
-            <p>IPO Money Tree.</p>
-            <MoneyTree />
-          </section>
-        </main>
-      </section>
+        </section>
 
+        {/* These sections will be built later. */}
+        <div id="ipos" className="future-section-anchor" />
+        <div id="compare" className="future-section-anchor" />
+      </main>
+    </div>
   )
 }
 
