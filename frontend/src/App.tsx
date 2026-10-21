@@ -61,7 +61,7 @@ function App() {
               </span>
 
               <a className="hero-link" href="#ipos">
-                Discover opportunities <span aria-hidden="true">↓</span>
+                Discover opportunities and knowledge <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
