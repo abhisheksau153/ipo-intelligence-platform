@@ -2,30 +2,28 @@
 .money-tree {
   position: relative;
   width: 100%;
-  height: 100%;
-  max-width: none;
-  margin: 0;
+  height: 380px;
+  max-height: 42vh;
+  min-height: 280px;
+  margin: 0 auto;
   padding: 0;
   overflow: hidden;
-  border: 0;
-  border-radius: 0;
   background: transparent;
-  box-shadow: none;
 }
 
 .money-tree-scene {
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 300px;
+  min-height: 0;
   overflow: hidden;
   isolation: isolate;
-  background:
-    radial-gradient(
-      ellipse at 50% 48%,
-      rgb(30 58 138 / 25%),
-      transparent 65%
-    );
+  background: radial-gradient(
+    ellipse at 50% 48%,
+    rgb(59 130 246 / 16%),
+    rgb(30 58 138 / 10%) 38%,
+    transparent 70%
+  );
 }
 
 .money-tree-svg {
@@ -35,46 +33,76 @@
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
 }
 
-/* Golden atmosphere */
+/* Cool blue atmosphere behind the tree */
 .tree-ambient {
   position: absolute;
   z-index: 0;
-  left: 20%;
   top: 8%;
-  width: 60%;
-  height: 75%;
+  left: 17%;
+  width: 66%;
+  height: 78%;
   border-radius: 50%;
   background: radial-gradient(
     ellipse,
-    rgb(250 204 21 / 11%),
-    rgb(217 119 6 / 5%) 45%,
+    rgb(96 165 250 / 12%),
+    rgb(59 130 246 / 7%) 42%,
+    transparent 75%
+  );
+  filter: blur(26px);
+  animation: ambient-pulse 5s ease-in-out infinite;
+}
+
+.tree-glow-core {
+  position: absolute;
+  z-index: 0;
+  left: 31%;
+  bottom: 10%;
+  width: 38%;
+  height: 48%;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgb(96 165 250 / 12%),
+    rgb(59 130 246 / 5%) 42%,
     transparent 72%
   );
-  filter: blur(22px);
-  animation: ambient-pulse 5s ease-in-out infinite;
+  filter: blur(24px);
+  pointer-events: none;
+  animation: core-glow 4s ease-in-out infinite;
 }
 
 @keyframes ambient-pulse {
   0%,
   100% {
-    opacity: 0.55;
-    transform: scale(0.95);
+    opacity: 0.8;
+    transform: scale(0.98);
   }
 
   50% {
     opacity: 1;
-    transform: scale(1.08);
+    transform: scale(1.04);
   }
 }
 
-/* Tree movement */
+@keyframes core-glow {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Gentle movement of the complete tree */
 .tree-sway {
   transform-box: view-box;
-  transform-origin: 300px 415px;
-  animation: tree-sway 4.5s ease-in-out infinite;
+  transform-origin: 300px 405px;
+  animation: tree-sway 5.5s ease-in-out infinite;
 }
 
 @keyframes tree-sway {
@@ -84,230 +112,144 @@
   }
 
   25% {
-    transform: rotate(-1.4deg);
+    transform: rotate(-0.7deg);
   }
 
   50% {
-    transform: rotate(1.5deg);
+    transform: rotate(0.75deg);
   }
 
   75% {
-    transform: rotate(-0.8deg);
+    transform: rotate(-0.3deg);
   }
 }
 
-.tree-branches {
+/* Foliage: enlarge every cluster by 25% */
+.tree-foliage,
+.foliage-cluster {
+  pointer-events: none;
+}
+
+.foliage-cluster {
   transform-box: fill-box;
-  transform-origin: center bottom;
-  animation: branch-sway 3.2s ease-in-out infinite;
+  transform-origin: center;
+  transform: scale(1.25);
 }
 
-@keyframes branch-sway {
-  0%,
-  100% {
-    transform: rotate(0deg);
-  }
-
-  50% {
-    transform: rotate(0.6deg);
-  }
+.tree-foliage path {
+  filter: drop-shadow(0 0 1.5px rgb(34 197 94 / 16%));
 }
 
-/* Floating particles */
+.foliage-tip,
+.foliage-lower-left,
+.foliage-lower-right {
+  filter: drop-shadow(0 0 2px rgb(34 197 94 / 20%));
+}
+
+/* Ambient particles */
 .tree-particle {
-  fill: #fde68a;
+  fill: #dbeafe;
   opacity: 0;
-  filter: drop-shadow(0 0 5px rgb(250 204 21 / 90%));
-  animation: particle-float var(--particle-duration) ease-in-out
-    var(--particle-delay) infinite;
+  filter: drop-shadow(0 0 4px rgb(147 197 253 / 65%));
+  animation:
+    particle-float
+    var(--particle-duration, 5s)
+    ease-in-out
+    var(--particle-delay, 0s)
+    infinite;
 }
 
 @keyframes particle-float {
   0% {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translate(0, 8px);
   }
 
   35% {
     opacity: 0.85;
+    transform: translate(2px, 0);
   }
 
-  75% {
+  70% {
     opacity: 0.4;
+    transform: translate(5px, -9px);
   }
 
   100% {
     opacity: 0;
-    transform: translateY(-22px);
+    transform: translate(8px, -17px);
   }
 }
 
-/* SVG coin container: coordinates match the tree viewBox */
-.tree-coins {
+/* SVG coin animation */
+.tree-coins,
+.coin-drop-group {
   pointer-events: none;
 }
 
-.coin-foreign-object {
-  overflow: visible;
-  animation: coin-drop var(--coin-duration) ease-in
-    var(--coin-delay) infinite;
+.coin-drop-group {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+.coin-lifecycle {
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform, opacity;
 }
 
-/* Coin with metallic edge and dimensional face */
-.tree-coin {
-  position: relative;
-  width: 14px;
-  height: 14px;
-  border: 1px solid #fff0a0;
-  border-radius: 50%;
-  background: linear-gradient(
-    180deg,
-    #d99008 0%,
-    #a16207 65%,
-    #713f12 100%
-  );
-  box-shadow:
-    0 2px 0 #78350f,
-    0 3px 5px rgb(0 0 0 / 35%),
-    0 0 7px rgb(250 204 21 / 60%);
+.coin-edge {
+  fill: #8a500e;
+  stroke: #fff0a0;
+  stroke-width: 1.1;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 40%));
 }
 
-.tree-coin-face {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  border: 1px solid #fff4b0;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle at 30% 25%,
-    #fffde0 0%,
-    #fff1a6 25%,
-    #facc15 58%,
-    #d99008 100%
-  );
-  box-shadow:
-    inset 0 1px 2px rgb(255 255 255 / 90%),
-    inset 0 -2px 3px rgb(120 53 15 / 35%);
+.coin-face {
+  fill: url(#mt-coin);
+  stroke: #fff7c7;
+  stroke-width: 0.9;
+  filter: drop-shadow(0 0 3px rgb(250 204 21 / 65%));
+}
+
+.coin-ring {
+  fill: none;
+  stroke: rgb(120 53 15 / 65%);
+  stroke-width: 0.65;
 }
 
 .coin-symbol {
-  color: #854d0e;
+  fill: #854d0e;
   font-family: Georgia, serif;
-  font-size: 9px;
-  line-height: 1;
-  font-weight: 900;
-  text-shadow: 0 1px rgb(255 243 166 / 80%);
-}
-
-/* Falling motion */
-@keyframes coin-drop {
-  0%,
-  30% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(0deg) rotateY(0deg);
-  }
-
-  42% {
-    opacity: 1;
-    transform: translate(5px, 25px) rotate(45deg) rotateY(90deg);
-  }
-
-  65% {
-    opacity: 1;
-    transform:
-      translate(calc(var(--coin-drift) * 25px), 160px)
-      rotate(180deg)
-      rotateY(180deg);
-  }
-
-  85% {
-    opacity: 1;
-    transform:
-      translate(calc(var(--coin-drift) * 45px), 260px)
-      rotate(300deg)
-      rotateY(270deg);
-  }
-
-  94%,
-  100% {
-    opacity: 0;
-    transform:
-      translate(calc(var(--coin-drift) * 55px), 300px)
-      rotate(360deg)
-      rotateY(360deg);
-  }
-}
-
-/* Ground */
-.coin-floor {
-  position: absolute;
-  z-index: 3;
-  left: 0;
-  right: 0;
-  bottom: 3%;
-  height: 10%;
-  border-bottom: 2px solid rgb(250 204 21 / 25%);
-  background: linear-gradient(
-    to top,
-    rgb(250 204 21 / 9%),
-    transparent
-  );
+  font-weight: 800;
   pointer-events: none;
 }
 
-.floor-coin {
-  position: absolute;
-  bottom: 0;
-  width: var(--floor-size);
-  height: calc(var(--floor-size) * 0.48);
-  border: 1px solid #fff0a0;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    #fffde0 0%,
-    #facc15 48%,
-    #d99008 78%,
-    #854d0e 100%
-  );
-  box-shadow:
-    0 0 4px rgb(250 204 21 / 40%),
-    inset 0 0 2px rgb(255 255 255 / 80%);
-  transform: translateX(var(--floor-drift))
-    rotate(var(--floor-rotation));
-  animation: coin-settle 0.55s ease-out both;
-}
-
-@keyframes coin-settle {
-  0% {
-    opacity: 0;
-    transform: translate(var(--floor-drift), -24px)
-      rotate(var(--floor-rotation));
+/* Responsive layout */
+@media (max-width: 640px) {
+  .money-tree {
+    height: 320px;
+    max-height: 40vh;
+    min-height: 240px;
   }
 
-  60% {
-    opacity: 1;
-    transform: translate(var(--floor-drift), 2px)
-      rotate(var(--floor-rotation));
+  .tree-ambient {
+    left: 10%;
+    width: 80%;
   }
 
-  100% {
-    opacity: 1;
-    transform: translateX(var(--floor-drift))
-      rotate(var(--floor-rotation));
+  .tree-glow-core {
+    left: 23%;
+    width: 54%;
   }
 }
 
+/* Respect reduced-motion preferences */
 @media (prefers-reduced-motion: reduce) {
   .tree-sway,
-  .tree-branches,
   .tree-particle,
   .tree-ambient,
-  .coin-foreign-object,
-  .floor-coin {
-    animation: none;
+  .tree-glow-core {
+    animation: none !important;
   }
 }
