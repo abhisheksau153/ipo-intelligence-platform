@@ -1,6 +1,7 @@
 
 import type { CSSProperties } from 'react'
 import './MoneyTree.css'
+import FloatingLeaves from './FloatingLeaves'
 
 type FallingCoin = {
   id: number
@@ -579,6 +580,7 @@ function MoneyTree() {
             strokeWidth="1"
           />
         </svg>
+        <FloatingLeaves />
       </div>
     </div>
   )
