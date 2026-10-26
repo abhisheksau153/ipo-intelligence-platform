@@ -5,10 +5,10 @@ from backend.normalizers.ipo_normalizer import normalize_ipo_data
 from backend.repositories.ipo_repository import save_ipos
 
 def ingest_current_ipos():
-    if not fetch_current_ipos:
-        return []  # Return an empty list if no IPOs are fetched
-    "Ingest current IPOs from NSE and return the filtered data."
+    """ Ingest current IPOs from NSE and rturn the filtered data"""
     ipos = fetch_current_ipos()
+    if not ipos:
+        return []  # Return an empty list if no IPOs are fetched
     for ipo in ipos:
         normalize_ipo_data(ipo)
     save_ipos(ipos)
