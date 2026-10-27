@@ -2,9 +2,19 @@
 from flask import Flask
 from backend.services import ipo_service
 from backend.ingestion.ipo_ingestion import ingest_current_ipos
+from flask_cors import CORS
 
 
 my_app = Flask(__name__)
+
+CORS(my_app,resources={
+    r"/*": {
+        'origins': [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173"
+        ]
+    }
+})
 
 @my_app.route('/ipos', methods=['GET'])
 def get_ipos():
