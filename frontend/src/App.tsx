@@ -1,8 +1,27 @@
 
 import './App.css'
 import MoneyTree from './MoneyTree'
+import { useEffect, useState } from 'react'
+import type { IPO } from './types/ipo'
+import { fetchIPOs } from './services/ipoService'
 
 function App() {
+  const [ipos, setIpos] = useState<IPO[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    async function loadIPOs() {
+      try {
+        const returnedIPOs = await fetchIPOs()
+        setIpos(returnedIPOs)
+      } catch (err) {
+        setError("unable to load IPOs. Please try again later.")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadIPOs()
+  }, [])
   return (
     <div className="app-shell" id="home">
       <header className="site-nav">
@@ -67,8 +86,26 @@ function App() {
           </div>
         </section>
 
-        {/* These sections will be built later. */}
-        <div id="ipos" className="future-section-anchor" />
+        <div id="ipos" className="ipo-section">
+          <div className='section-heading'>
+              <p className='section-eyebrow'> THE IPO MARKET</p>
+              <h2>Explore IPOs</h2>
+              <p className='section-description'>
+                Discover public offerings and explore the companies behind them.
+              </p>
+          </div>
+          {isLoading && <p>Loading IPOs.....</p>}
+
+          {error && <p>{error}</p>}
+
+          {!isLoading && !error && ipos.length ===0 && (
+            <p>No IPOs found.</p>
+          )}
+          {!isLoading && !error && ipos.length >0 && (
+            <p>Found {ipos.length}</p>
+          )}
+          </div>
+
         <div id="compare" className="future-section-anchor" />
       </main>
     </div>
