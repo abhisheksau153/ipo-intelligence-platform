@@ -3,7 +3,7 @@ import './App.css'
 import MoneyTree from './MoneyTree'
 import { useEffect, useState } from 'react'
 import type { IPO } from './types/ipo'
-import { fetchIPOs } from './services/ipoService'
+import { fetchIPOs, refreshIPOs  } from './services/ipoService'
 
 function App() {
   const [ipos, setIpos] = useState<IPO[]>([])
@@ -12,6 +12,7 @@ function App() {
   useEffect(() => {
     async function loadIPOs() {
       try {
+        await refreshIPOs()
         const returnedIPOs = await fetchIPOs()
         setIpos(returnedIPOs)
       } catch (err) {
@@ -102,7 +103,21 @@ function App() {
             <p>No IPOs found.</p>
           )}
           {!isLoading && !error && ipos.length >0 && (
-            <p>Found {ipos.length}</p>
+            <div className='ipo-grid'>
+              {ipos.map((ipo) => (
+                <div className="ipo-card" key={ipo.id}>
+                  <div className="ipo-card-header">
+                    <h3>{ipo.company_name}</h3>
+
+                    <span className={`ipo-status ${ipo.status.toLowerCase()}`}>
+                      {ipo.status}
+                    </span>
+                  </div>
+
+                  <p>Issue Price: {ipo.issue_price || 'Not announced'}</p>
+                </div>
+              ))}
+            </div>
           )}
           </div>
 

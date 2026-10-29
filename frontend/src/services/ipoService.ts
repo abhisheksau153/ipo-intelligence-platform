@@ -13,3 +13,13 @@ export async function fetchIPOs(): Promise<IPO[]> {
 
   return data.ipos
 }
+
+export async function refreshIPOs(): Promise<void> {
+  const response = await fetch(`${API_BASE_URL}/api/ipos/refresh`, {
+    method: 'POST',
+  })
+
+  if (!response.ok) {
+    throw new Error(`Failed to refresh IPOs: ${response.status}`)
+  }
+}
