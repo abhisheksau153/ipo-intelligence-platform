@@ -1,33 +1,74 @@
-
 import './App.css'
 import MoneyTree from './MoneyTree'
 import { useEffect, useState } from 'react'
 import type { IPO } from './types/ipo'
-import { fetchIPOs, refreshIPOs  } from './services/ipoService'
+import { fetchIPOs, refreshIPOs } from './services/ipoService'
+
+function formatDate(dateValue: string | null | undefined): string {
+  if (!dateValue) {
+    return 'Not announced'
+  }
+
+  const date = new Date(dateValue)
+
+  if (Number.isNaN(date.getTime())) {
+    return 'Not announced'
+  }
+
+  return date.toLocaleDateString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+}
 
 function App() {
   const [ipos, setIpos] = useState<IPO[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
   useEffect(() => {
     async function loadIPOs() {
       try {
         await refreshIPOs()
+
         const returnedIPOs = await fetchIPOs()
         setIpos(returnedIPOs)
-      } catch (err) {
-        setError("unable to load IPOs. Please try again later.")
+      } catch {
+        setError('Unable to load IPOs. Please try again later.')
       } finally {
         setIsLoading(false)
       }
     }
+
     loadIPOs()
   }, [])
+
+  const totalIPOs = ipos.length
+
+  const openIPOs = ipos.filter(
+    (ipo) => ipo.status?.toLowerCase() === 'open',
+  ).length
+
+  const upcomingIPOs = ipos.filter(
+    (ipo) => ipo.status?.toLowerCase() === 'upcoming',
+  ).length
+
+  const closedIPOs = ipos.filter(
+    (ipo) => ipo.status?.toLowerCase() === 'closed',
+  ).length
+
   return (
     <div className="app-shell" id="home">
       <header className="site-nav">
-        <a className="brand" href="#home" aria-label="IPO Intelligence home">
-          <span className="brand-icon" aria-hidden="true">♧</span>
+        <a
+          className="brand"
+          href="#home"
+          aria-label="IPO Intelligence home"
+        >
+          <span className="brand-icon" aria-hidden="true">
+            ♧
+          </span>
 
           <span className="brand-text">
             <span className="brand-name">IPO Intelligence</span>
@@ -36,9 +77,17 @@ function App() {
         </a>
 
         <nav className="nav-links" aria-label="Main navigation">
-          <a className="nav-link active" href="#home">Home</a>
-          <a className="nav-link" href="#ipos">IPOs</a>
-          <a className="nav-link" href="#compare">Compare</a>
+          <a className="nav-link active" href="#home">
+            Home
+          </a>
+
+          <a className="nav-link" href="#ipos">
+            IPOs
+          </a>
+
+          <a className="nav-link" href="#compare">
+            Compare
+          </a>
         </nav>
 
         <a className="nav-cta" href="#ipos">
@@ -81,45 +130,143 @@ function App() {
               </span>
 
               <a className="hero-link" href="#ipos">
-                Discover opportunities and knowledge <span aria-hidden="true">↓</span>
+                Discover opportunities and knowledge{' '}
+                <span aria-hidden="true">↓</span>
               </a>
             </div>
           </div>
         </section>
 
-        <div id="ipos" className="ipo-section">
-          <div className='section-heading'>
-              <p className='section-eyebrow'> THE IPO MARKET</p>
-              <h2>Explore IPOs</h2>
-              <p className='section-description'>
-                Discover public offerings and explore the companies behind them.
-              </p>
+        <section id="ipos" className="ipo-section">
+          <div className="section-heading">
+            <p className="section-eyebrow">THE IPO MARKET</p>
+
+            <h2>Explore IPOs</h2>
+
+            <p className="section-description">
+              Discover public offerings and explore the companies behind them.
+            </p>
           </div>
-          {isLoading && <p>Loading IPOs.....</p>}
 
-          {error && <p>{error}</p>}
-
-          {!isLoading && !error && ipos.length ===0 && (
-            <p>No IPOs found.</p>
+          {isLoading && (
+            <p className="ipo-message">Loading IPO data...</p>
           )}
-          {!isLoading && !error && ipos.length >0 && (
-            <div className='ipo-grid'>
-              {ipos.map((ipo) => (
-                <div className="ipo-card" key={ipo.id}>
-                  <div className="ipo-card-header">
-                    <h3>{ipo.company_name}</h3>
 
-                    <span className={`ipo-status ${ipo.status.toLowerCase()}`}>
-                      {ipo.status}
-                    </span>
-                  </div>
+          {error && (
+            <p className="ipo-message error-message">{error}</p>
+          )}
 
-                  <p>Issue Price: {ipo.issue_price || 'Not announced'}</p>
+          {!isLoading && !error && (
+            <>
+              <div className="ipo-summary-grid">
+                <div className="summary-card">
+                  <span className="summary-label">TOTAL IPOs</span>
+                  <span className="summary-value">{totalIPOs}</span>
+                  <span className="summary-note">All tracked offerings</span>
                 </div>
-              ))}
-            </div>
+
+                <div className="summary-card open-summary">
+                  <span className="summary-label">OPEN IPOs</span>
+                  <span className="summary-value">{openIPOs}</span>
+                  <span className="summary-note">
+                    Currently accepting bids
+                  </span>
+                </div>
+
+                <div className="summary-card upcoming-summary">
+                  <span className="summary-label">UPCOMING IPOs</span>
+                  <span className="summary-value">{upcomingIPOs}</span>
+                  <span className="summary-note">Expected to open</span>
+                </div>
+
+                <div className="summary-card closed-summary">
+                  <span className="summary-label">CLOSED IPOs</span>
+                  <span className="summary-value">{closedIPOs}</span>
+                  <span className="summary-note">Bidding has ended</span>
+                </div>
+              </div>
+
+              {ipos.length === 0 ? (
+                <p className="ipo-message">No IPOs found.</p>
+              ) : (
+                <div className="ipo-grid">
+                  {ipos.map((ipo) => {
+                    const status = ipo.status?.toLowerCase() || 'unknown'
+
+                    return (
+                      <article className="ipo-card" key={ipo.id}>
+                        <div className="ipo-card-header">
+                          <div className="ipo-company">
+                            <span className="ipo-company-symbol">
+                              {ipo.company_name?.charAt(0) || 'I'}
+                            </span>
+
+                            <div>
+                              <h3>{ipo.company_name}</h3>
+
+                              <p className="ipo-symbol">
+                                {ipo.symbol || 'IPO listing'}
+                              </p>
+                            </div>
+                          </div>
+
+                          <span className={`ipo-status ${status}`}>
+                            <span className="status-indicator" />
+                            {ipo.status || 'Unknown'}
+                          </span>
+                        </div>
+
+                        <div className="ipo-price-block">
+                          <span className="detail-label">ISSUE PRICE</span>
+
+                          <p className="ipo-price">
+                            {ipo.issue_price || 'Not announced'}
+                          </p>
+                        </div>
+
+                        <div className="ipo-details-grid">
+                          <div className="ipo-detail">
+                            <span className="detail-label">ISSUE SIZE</span>
+
+                            <span className="detail-value">
+                              {ipo.issue_size != null && ipo.issue_size !== 0
+                                ? ipo.issue_size.toLocaleString('en-IN')
+                                : 'Not announced'}
+                            </span>
+                          </div>
+
+                          <div className="ipo-detail">
+                            <span className="detail-label">OPENING DATE</span>
+
+                            <span className="detail-value">
+                              {formatDate(ipo.issue_start_date)}
+                            </span>
+                          </div>
+
+                          <div className="ipo-detail closing-detail">
+                            <span className="detail-label">CLOSING DATE</span>
+
+                            <span className="detail-value">
+                              {formatDate(ipo.issue_end_date)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="ipo-card-footer">
+                          <span>IPO Overview</span>
+
+                          <span className="card-arrow" aria-hidden="true">
+                            ↗
+                          </span>
+                        </div>
+                      </article>
+                    )
+                  })}
+                </div>
+              )}
+            </>
           )}
-          </div>
+        </section>
 
         <div id="compare" className="future-section-anchor" />
       </main>
